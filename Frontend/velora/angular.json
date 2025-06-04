@@ -60,6 +60,10 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "buildTarget": "velora:build",
+            "proxyConfig": "proxy.config.mjs"
+          },
           "configurations": {
             "production": {
               "buildTarget": "velora:build:production"

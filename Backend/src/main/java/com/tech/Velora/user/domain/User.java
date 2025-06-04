@@ -65,6 +65,13 @@ public class User extends AbstractAuditingEntity {
     public Set<Authority> getAuthorities() { return authorities; }
     public void setAuthorities(Set<Authority> authorities) { this.authorities = authorities; }
 
+
+    @PrePersist
+    public void prePersist() {
+        if (this.publicId == null) {
+            this.publicId = UUID.randomUUID();
+        }
+    }
     @Override
     public boolean equals (Object o) {
         if (this == o) return true;
