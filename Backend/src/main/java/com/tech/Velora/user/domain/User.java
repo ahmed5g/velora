@@ -2,6 +2,7 @@ package com.tech.Velora.user.domain;
 
 import com.tech.Velora.sharedkernel.doamin.AbstractAuditingEntity;
 import jakarta.persistence.*;
+import org.hibernate.annotations.UuidGenerator;
 
 import java.util.HashSet;
 import java.util.Objects;
@@ -30,6 +31,7 @@ public class User extends AbstractAuditingEntity {
     @Column(name = "image_url")
     private String imageUrl;
 
+    @UuidGenerator
     @Column(name = "public_id", unique = true)
     private UUID publicId;
 
@@ -66,12 +68,7 @@ public class User extends AbstractAuditingEntity {
     public void setAuthorities(Set<Authority> authorities) { this.authorities = authorities; }
 
 
-    @PrePersist
-    public void prePersist() {
-        if (this.publicId == null) {
-            this.publicId = UUID.randomUUID();
-        }
-    }
+
     @Override
     public boolean equals (Object o) {
         if (this == o) return true;

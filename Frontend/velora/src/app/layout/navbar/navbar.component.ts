@@ -80,7 +80,7 @@ export class NavbarComponent implements OnInit {
         {
           label: "My reservation",
           routerLink: "landlord/reservation",
-          visible: this.hasToBeLandlord(),
+          visible: this.hasToBeTenant(),
         },
         {
           label: "Log out",
@@ -102,11 +102,12 @@ export class NavbarComponent implements OnInit {
     }
   }
 
-  hasToBeLandlord(): boolean {
-    return this.authService.hasAnyAuthority("ROLE_LANDLORD");
+  hasToBeTenant(): boolean {
+    return this.authService.hasAnyAuthority("ROLE_TENANT");
   }
 
 
-
-
+  private hasToBeLandlord() {
+    return this.authService.hasAnyAuthority("ROLE_LANDLORD");
+  }
 }
