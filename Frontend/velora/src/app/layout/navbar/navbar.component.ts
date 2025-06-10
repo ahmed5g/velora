@@ -11,7 +11,8 @@ import {ToastService} from '../toast.service';
 import {AuthService} from '../../core/auth/auth.service';
 
 import {User} from '../../core/model/user.model';
-import {DialogService, DynamicDialogRef} from 'primeng/dynamicdialog';
+import {DialogService, DynamicDialogRef} from "primeng/dynamicdialog";
+import {PropertiesCreateComponent} from '../../landlord/properties-create/properties-create.component';
 
 
 @Component({
@@ -109,5 +110,17 @@ export class NavbarComponent implements OnInit {
 
   private hasToBeLandlord() {
     return this.authService.hasAnyAuthority("ROLE_LANDLORD");
+  }
+
+  openNewListing(): void {
+    this.ref = this.dialogService.open(PropertiesCreateComponent,
+      {
+        width: "60%",
+        header: "Velora your home",
+        closable: true,
+        focusOnShow: true,
+        modal: true,
+        showHeader: true
+      })
   }
 }

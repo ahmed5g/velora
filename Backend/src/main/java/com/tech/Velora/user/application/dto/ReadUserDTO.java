@@ -7,5 +7,6 @@ public record ReadUserDTO(UUID publicId,
                           String firstName,
                           String lastName,
                           String imageUrl,
+                          String email,
                           Set<String> authorities) {
 }
