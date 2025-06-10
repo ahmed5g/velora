@@ -1,28 +1,28 @@
 import { Injectable } from '@angular/core';
-import {Subject} from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
-
-export interface ToastMessage{
-  severity: string;
+export interface ToastMessage {
+  severity: 'success' | 'info' | 'warn' | 'error';
   summary: string;
-  detail?:string;
-
+  detail?: string;
 }
+
 @Injectable({
   providedIn: 'root'
 })
 export class ToastService {
 
-  readonly INIT_STATE = 'INIT';
-  private sendSub = new Subject<ToastMessage>();
+  INIT_STATE = "INIT";
 
-  constructor() { }
+  public send$ = new BehaviorSubject<ToastMessage>({
+    severity: 'info',
+    summary: this.INIT_STATE,
+    detail: ''
+  });
 
-  get send$(){
-    return this.sendSub.asObservable();
+  sendSub = this.send$.asObservable();
+
+  public send(message: ToastMessage): void {
+    this.send$.next(message);
   }
-  sendMessage(message: ToastMessage) {
-    this.sendSub.next(message);
-  }
-
 }

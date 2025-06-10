@@ -12,18 +12,24 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "listing")
-public class Listing extends AbstractAuditingEntity {
+public class Listing extends AbstractAuditingEntity<Long> {
+
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "listingSequenceGenerator")
+    @SequenceGenerator(name = "listingSequenceGenerator", sequenceName = "listing_generator", allocationSize = 1)
     @Column(name = "id")
     private Long id;
+
     @UuidGenerator
     @Column(name = "public_id", nullable = false)
     private UUID publicId;
+
     @Column(name = "title")
     private String title;
 
     @Column(name = "description")
     private String description;
+
     @Column(name = "guests")
     private int guests;
     @Column(name = "bedrooms")
@@ -32,144 +38,145 @@ public class Listing extends AbstractAuditingEntity {
     private int beds;
     @Column(name = "bathrooms")
     private int bathrooms;
+
     @Column(name = "price")
     private int price;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "category")
     private BookingCategory bookingCategory;
 
     @Column(name = "location")
     private String location;
 
-    @Column(name = "landloard_public_id")
-    private UUID landloardPublicId;
+    @Column(name = "landlord_public_id")
+    private UUID landlordPublicId;
+
     @OneToMany(mappedBy = "listing", cascade = CascadeType.REMOVE)
     private Set<ListingPicture> pictures = new HashSet<>();
 
     @Override
-    public Long getId () {
+    public Long getId() {
         return id;
     }
 
-    public void setId (Long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public UUID getPublicId () {
+    public UUID getPublicId() {
         return publicId;
     }
 
-    public void setPublicId (UUID publicId) {
+    public void setPublicId(UUID publicId) {
         this.publicId = publicId;
     }
 
-    public String getTitle () {
+    public String getTitle() {
         return title;
     }
 
-    public void setTitle (String title) {
+    public void setTitle(String title) {
         this.title = title;
     }
 
-    public String getDescription () {
+    public String getDescription() {
         return description;
     }
 
-    public void setDescription (String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
 
-    public int getGuests () {
+    public int getGuests() {
         return guests;
     }
 
-    public void setGuests (int guests) {
+    public void setGuests(int guests) {
         this.guests = guests;
     }
 
-    public int getBedrooms () {
+    public int getBedrooms() {
         return bedrooms;
     }
 
-    public void setBedrooms (int bedrooms) {
+    public void setBedrooms(int bedrooms) {
         this.bedrooms = bedrooms;
     }
 
-    public int getBeds () {
+    public int getBeds() {
         return beds;
     }
 
-    public void setBeds (int beds) {
+    public void setBeds(int beds) {
         this.beds = beds;
     }
 
-    public int getBathrooms () {
+    public int getBathrooms() {
         return bathrooms;
     }
 
-    public void setBathrooms (int bathrooms) {
+    public void setBathrooms(int bathrooms) {
         this.bathrooms = bathrooms;
     }
 
-    public int getPrice () {
+    public int getPrice() {
         return price;
     }
 
-    public void setPrice (int price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 
-    public BookingCategory getBookingCategory () {
+    public BookingCategory getBookingCategory() {
         return bookingCategory;
     }
 
-    public void setBookingCategory (BookingCategory bookingCategory) {
+    public void setBookingCategory(BookingCategory bookingCategory) {
         this.bookingCategory = bookingCategory;
     }
 
-    public String getLocation () {
+    public String getLocation() {
         return location;
     }
 
-    public void setLocation (String location) {
+    public void setLocation(String location) {
         this.location = location;
     }
 
-    public UUID getLandloardPublicId () {
-        return landloardPublicId;
+    public UUID getLandlordPublicId() {
+        return landlordPublicId;
     }
 
-    public void setLandloardPublicId (UUID landloardPublicId) {
-        this.landloardPublicId = landloardPublicId;
+    public void setLandlordPublicId(UUID landlordPublicId) {
+        this.landlordPublicId = landlordPublicId;
     }
 
-    public Set<ListingPicture> getPictures () {
+    public Set<ListingPicture> getPictures() {
         return pictures;
     }
 
-    public void setPictures (Set<ListingPicture> pictures) {
+    public void setPictures(Set<ListingPicture> pictures) {
         this.pictures = pictures;
     }
 
     @Override
-    public boolean equals (Object o) {
+    public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Listing listing = (Listing) o;
-        return guests == listing.guests && bedrooms == listing.bedrooms && beds == listing.beds && bathrooms == listing.bathrooms && price == listing.price && Objects.equals(id, listing.id) && Objects.equals(publicId, listing.publicId) && Objects.equals(title, listing.title) && Objects.equals(description, listing.description) && bookingCategory == listing.bookingCategory && Objects.equals(location, listing.location) && Objects.equals(landloardPublicId, listing.landloardPublicId) && Objects.equals(pictures, listing.pictures);
+        return guests == listing.guests && bedrooms == listing.bedrooms && beds == listing.beds && bathrooms == listing.bathrooms && price == listing.price && Objects.equals(title, listing.title) && Objects.equals(description, listing.description) && bookingCategory == listing.bookingCategory && Objects.equals(location, listing.location) && Objects.equals(landlordPublicId, listing.landlordPublicId);
     }
 
     @Override
-    public int hashCode () {
-        return Objects.hash(id, publicId, title, description, guests, bedrooms, beds, bathrooms, price, bookingCategory, location, landloardPublicId, pictures);
+    public int hashCode() {
+        return Objects.hash(title, description, guests, bedrooms, beds, bathrooms, price, bookingCategory, location, landlordPublicId);
     }
 
     @Override
-    public String toString () {
+    public String toString() {
         return "Listing{" +
-                "id=" + id +
-                ", publicId=" + publicId +
-                ", title='" + title + '\'' +
+                "title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", guests=" + guests +
                 ", bedrooms=" + bedrooms +
@@ -178,8 +185,7 @@ public class Listing extends AbstractAuditingEntity {
                 ", price=" + price +
                 ", bookingCategory=" + bookingCategory +
                 ", location='" + location + '\'' +
-                ", landloardPublicId=" + landloardPublicId +
-                ", pictures=" + pictures +
+                ", landlordPublicId=" + landlordPublicId +
                 '}';
     }
 }

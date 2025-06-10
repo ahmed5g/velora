@@ -44,7 +44,7 @@ okta:
 
 application:
   auth0:
-    role-landloard-id: rol_AHgO7ay1mmagnYzh
+    role-landlord-id: rol_AHgO7ay1mmagnYzh
 
 
 logging:
