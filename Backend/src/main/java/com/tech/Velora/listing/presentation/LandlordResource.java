@@ -2,10 +2,13 @@ package com.tech.Velora.listing.presentation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tech.Velora.infrastructure.config.SecurityUtils;
+import com.tech.Velora.listing.application.DisplayCardListingDTO;
 import com.tech.Velora.listing.application.LandlordService;
 import com.tech.Velora.listing.application.dto.CreatedListingDTO;
 import com.tech.Velora.listing.application.dto.SaveListingDTO;
 import com.tech.Velora.listing.application.dto.sub.PictureDTO;
+import com.tech.Velora.sharedkernel.doamin.service.State;
+import com.tech.Velora.sharedkernel.doamin.service.StatusNotification;
 import com.tech.Velora.user.application.dto.ReadUserDTO;
 import com.tech.Velora.user.application.dto.UserException;
 import com.tech.Velora.user.application.dto.UserService;
@@ -20,10 +23,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import javax.swing.plaf.nimbus.State;
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -85,5 +88,24 @@ public class LandlordResource {
         };
     }
 
+    @GetMapping(value = "/get-all")
+    @PreAuthorize("hasAnyRole('" + SecurityUtils.ROLE_LANDLORD + "')")
+    public ResponseEntity<List<DisplayCardListingDTO>> getAll() {
+        ReadUserDTO connectedUser = userService.getAuthenticatedUserFromSecurityContext();
+        List<DisplayCardListingDTO> allProperties = landlordService.getAllProperties(connectedUser);
+        return ResponseEntity.ok(allProperties);
+    }
 
+    @DeleteMapping("/delete")
+    @PreAuthorize("hasAnyRole('" + SecurityUtils.ROLE_LANDLORD + "')")
+    public ResponseEntity<UUID> delete(@RequestParam UUID publicId) {
+        ReadUserDTO connectedUser = userService.getAuthenticatedUserFromSecurityContext();
+        State<UUID, String> deleteState = landlordService.delete(publicId, connectedUser);
+        if (deleteState.getStatus().equals(StatusNotification.OK)) {
+            return ResponseEntity.ok(deleteState.getValue());
+        } else if (deleteState.getStatus().equals(StatusNotification.UNAUTHORIZED)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
 }
