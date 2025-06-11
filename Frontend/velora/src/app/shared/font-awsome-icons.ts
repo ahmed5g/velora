@@ -52,5 +52,6 @@ export const fontAwsomeIcons: IconDefinition[] = [
   faUmbrellaBeach,
   faUser,
   faWater,
-  faAirbnb
+  faAirbnb,
+  faCircleNotch
 ]
