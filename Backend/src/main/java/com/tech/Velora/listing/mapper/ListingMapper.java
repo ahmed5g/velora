@@ -34,6 +34,7 @@ public interface ListingMapper {
     @Mapping(target = "cover", source = "pictures")
     List<DisplayCardListingDTO> listingToDisplayCardListingDTOs(List<Listing> listings);
 
+
     @Mapping(target = "cover", source = "pictures", qualifiedByName = "extract-cover")
     DisplayCardListingDTO listingToDisplayCardListingDTO(Listing listing);
 

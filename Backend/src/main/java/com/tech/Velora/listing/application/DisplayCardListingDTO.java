@@ -7,7 +7,7 @@ import com.tech.Velora.listing.domain.BookingCategory;
 import java.util.UUID;
 
 public record DisplayCardListingDTO(
-        PricesVO prices,
+        PricesVO price,
         String location,
         PictureDTO cover,
         BookingCategory bookingCategory,

@@ -40,18 +40,27 @@ public class LandlordResource {
 
     private final UserService userService;
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
 
-    public LandlordResource(LandlordService landlordService, Validator validator, UserService userService) {
+    public LandlordResource (LandlordService landlordService, Validator validator, UserService userService) {
         this.landlordService = landlordService;
         this.validator = validator;
         this.userService = userService;
     }
 
+    private static Function<MultipartFile, PictureDTO> mapMultipartFileToPictureDTO () {
+        return multipartFile -> {
+            try {
+                return new PictureDTO(multipartFile.getBytes(), multipartFile.getContentType(), false);
+            } catch (IOException ioe) {
+                throw new UserException(String.format("Cannot parse multipart file: %s", multipartFile.getOriginalFilename()));
+            }
+        };
+    }
 
     @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<CreatedListingDTO> create(
+    public ResponseEntity<CreatedListingDTO> create (
             MultipartHttpServletRequest request,
             @RequestPart(name = "dto") String saveListingDTOString
     ) throws IOException {
@@ -77,20 +86,9 @@ public class LandlordResource {
         }
     }
 
-
-    private static Function<MultipartFile, PictureDTO> mapMultipartFileToPictureDTO() {
-        return multipartFile -> {
-            try {
-                return new PictureDTO(multipartFile.getBytes(), multipartFile.getContentType(), false);
-            } catch (IOException ioe) {
-                throw new UserException(String.format("Cannot parse multipart file: %s", multipartFile.getOriginalFilename()));
-            }
-        };
-    }
-
     @GetMapping(value = "/get-all")
     @PreAuthorize("hasAnyRole('" + SecurityUtils.ROLE_LANDLORD + "')")
-    public ResponseEntity<List<DisplayCardListingDTO>> getAll() {
+    public ResponseEntity<List<DisplayCardListingDTO>> getAll () {
         ReadUserDTO connectedUser = userService.getAuthenticatedUserFromSecurityContext();
         List<DisplayCardListingDTO> allProperties = landlordService.getAllProperties(connectedUser);
         return ResponseEntity.ok(allProperties);
@@ -98,7 +96,7 @@ public class LandlordResource {
 
     @DeleteMapping("/delete")
     @PreAuthorize("hasAnyRole('" + SecurityUtils.ROLE_LANDLORD + "')")
-    public ResponseEntity<UUID> delete(@RequestParam UUID publicId) {
+    public ResponseEntity<UUID> delete (@RequestParam UUID publicId) {
         ReadUserDTO connectedUser = userService.getAuthenticatedUserFromSecurityContext();
         State<UUID, String> deleteState = landlordService.delete(publicId, connectedUser);
         if (deleteState.getStatus().equals(StatusNotification.OK)) {
