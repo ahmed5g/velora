@@ -44,20 +44,6 @@ export class CardListingComponent {
     this.listenToCardMode();
     this.enrichLocationWithCountry();
 
-    effect(() => {
-      console.log('listing data:', this.listing());
-      console.log('cardMode:', this.cardMode());
-      console.log('Card listing prices:', this.cardListing?.price);
-
-
-      if (this.cardMode() === 'booking') {
-        console.log('Booking dates:', this.bookingListing?.dates);
-        console.log('Booking price:', this.bookingListing?.totalPrice);
-      } else {
-        console.log('Card listing category:', this.cardListing?.bookingCategory);
-        console.log('Card listing price:', this.cardListing?.price);
-      }
-    });
   }
 
   private listenToCardMode() {

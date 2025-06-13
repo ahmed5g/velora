@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import {PropertiesComponent} from './landlord/properties/properties.component';
 import {authorityRouteAccess} from './core/auth/authority-toute-access';
+import {HomeComponent} from './home/home.component';
 
 export const routes: Routes = [
 
@@ -11,5 +12,9 @@ export const routes: Routes = [
     data:{
       authorities: ["ROLE_LANDLORD"]
     }
+  },
+  {
+    path: "",
+    component: HomeComponent
   }
 ];
