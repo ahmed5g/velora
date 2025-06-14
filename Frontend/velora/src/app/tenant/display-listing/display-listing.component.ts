@@ -10,13 +10,15 @@ import {Category} from '../../layout/navbar/category/category.model';
 import {FaIconComponent} from '@fortawesome/angular-fontawesome';
 import {AvatarComponent} from '../../layout/navbar/avatar/avatar.component';
 import {NgClass} from '@angular/common';
+import {BookDateComponent} from "../book-date/book-date.component";
 
 @Component({
   selector: 'app-display-listing',
   imports: [
     FaIconComponent,
     AvatarComponent,
-    NgClass
+    NgClass,
+    BookDateComponent
   ],
   templateUrl: './display-listing.component.html',
   standalone: true,
