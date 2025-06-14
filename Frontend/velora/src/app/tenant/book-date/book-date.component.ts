@@ -1,20 +1,30 @@
 import {Component, effect, inject, input, OnDestroy, OnInit} from '@angular/core';
-import {Listing} from '../../landlord/model/listing.model';
-import {ToastService} from '../../layout/toast.service';
-import {AuthService} from '../../core/auth/auth.service';
-import {Router} from '@angular/router';
-import {BookingService} from '../service/booking.service';
-import dayjs from 'dayjs';
-import {BookedDatesDTOFromClient, CreateBooking} from '../model/booking.model';
+import {Listing} from "../../landlord/model/listing.model";
+import {BookingService} from "../service/booking.service";
+import {ToastService} from "../../layout/toast.service";
+import {AuthService} from "../../core/auth/auth.service";
+import {Router} from "@angular/router";
+import dayjs from "dayjs";
+import {BookedDatesDTOFromClient, CreateBooking} from "../model/booking.model";
+import {CurrencyPipe, NgIf} from "@angular/common";
+import {CalendarModule} from "primeng/calendar";
+import {FormsModule} from "@angular/forms";
+import {MessageModule} from "primeng/message";
 
 @Component({
   selector: 'app-book-date',
-  imports: [],
-  templateUrl: './book-date.component.html',
   standalone: true,
+  imports: [
+    CurrencyPipe,
+    CalendarModule,
+    FormsModule,
+    MessageModule,
+    NgIf
+  ],
+  templateUrl: './book-date.component.html',
   styleUrl: './book-date.component.scss'
 })
-export class BookDateComponent implements OnInit, OnDestroy{
+export class BookDateComponent implements OnInit, OnDestroy {
 
   listing = input.required<Listing>();
   listingPublicId = input.required<string>();
@@ -110,7 +120,7 @@ export class BookDateComponent implements OnInit, OnDestroy{
       const createBookingState = this.bookingService.createBookingSig();
       if (createBookingState.status === "OK") {
         this.toastService.send({
-          summary: '',
+          summary: "",
           severity: "success", detail: "Booking created successfully"
         });
         this.router.navigate(['/booking']);
@@ -122,7 +132,4 @@ export class BookDateComponent implements OnInit, OnDestroy{
       }
     });
   }
-
-
-
 }
