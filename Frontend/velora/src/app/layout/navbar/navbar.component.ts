@@ -26,9 +26,9 @@ import {PropertiesCreateComponent} from '../../landlord/properties-create/proper
     AvatarComponent,
     RouterLink
   ],
+  standalone: true,
   providers:[DialogService],
   templateUrl: './navbar.component.html',
-  standalone: true,
   styleUrl: './navbar.component.scss',
 
 })
