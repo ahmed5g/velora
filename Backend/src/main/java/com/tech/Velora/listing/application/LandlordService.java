@@ -1,6 +1,7 @@
 package com.tech.Velora.listing.application;
 
 import com.tech.Velora.listing.application.dto.CreatedListingDTO;
+import com.tech.Velora.listing.application.dto.ListingCreateBookingDTO;
 import com.tech.Velora.listing.application.dto.PictureService;
 import com.tech.Velora.listing.application.dto.SaveListingDTO;
 import com.tech.Velora.listing.domain.Listing;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 
@@ -58,8 +60,8 @@ public class LandlordService {
 
     @Transactional
     public State<UUID, String> delete(UUID publicId, ReadUserDTO landlord) {
-        long deletedSuccessfuly = listingRepository.deleteByPublicIdAndLandlordPublicId(publicId, landlord.publicId());
-        if (deletedSuccessfuly > 0) {
+        long deletedSuccessfully = listingRepository.deleteByPublicIdAndLandlordPublicId(publicId, landlord.publicId());
+        if (deletedSuccessfully > 0) {
             return State.<UUID, String>builder().forSuccess(publicId);
         } else {
             return State.<UUID, String>builder().forUnauthorized("User not authorized to delete this listing");
@@ -67,4 +69,20 @@ public class LandlordService {
     }
 
 
+    public Optional<ListingCreateBookingDTO> getByListingPublicId(UUID publicId) {
+        return listingRepository.findByPublicId(publicId).map(listingMapper::mapListingToListingCreateBookingDTO);
+    }
+
+    public Optional<DisplayCardListingDTO> getByPublicIdAndLandlordPublicId (UUID listingPublicId, UUID landlordPublicId) {
+        return listingRepository.findOneByPublicIdAndLandlordPublicId(listingPublicId,landlordPublicId)
+                .map(listingMapper::listingToDisplayCardListingDTO);
+    }
+
+    public List<DisplayCardListingDTO> getCardDisplayByListingPublicId (List<UUID> allListingPublicIDs) {
+
+        return listingRepository.findAllByPublicIdIn(allListingPublicIDs)
+                .stream()
+                .map(listingMapper:: listingToDisplayCardListingDTO)
+                .toList();
+    }
 }

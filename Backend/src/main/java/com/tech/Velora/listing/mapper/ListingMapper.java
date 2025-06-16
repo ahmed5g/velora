@@ -3,6 +3,7 @@ package com.tech.Velora.listing.mapper;
 import com.tech.Velora.listing.application.DisplayCardListingDTO;
 import com.tech.Velora.listing.application.dto.CreatedListingDTO;
 import com.tech.Velora.listing.application.dto.DisplayListingDTO;
+import com.tech.Velora.listing.application.dto.ListingCreateBookingDTO;
 import com.tech.Velora.listing.application.dto.SaveListingDTO;
 
 import com.tech.Velora.listing.application.dto.vo.PricesVO;
@@ -14,7 +15,6 @@ import java.util.List;
 
 @Mapper(componentModel = "spring", uses = {ListingPictureMapper.class})
 public interface ListingMapper {
-
     @Mapping(target = "landlordPublicId", ignore = true)
     @Mapping(target = "publicId", ignore = true)
     @Mapping(target = "lastModifiedDate", ignore = true)
@@ -29,17 +29,17 @@ public interface ListingMapper {
     @Mapping(target = "beds", source = "infos.beds.value")
     @Mapping(target = "bathrooms", source = "infos.baths.value")
     @Mapping(target = "price", source = "price.value")
-    Listing saveListingDTOToListing (SaveListingDTO saveListingDTO);
+    Listing saveListingDTOToListing(SaveListingDTO saveListingDTO);
 
-    CreatedListingDTO listingToCreatedListingDTO (Listing listing);
+    CreatedListingDTO listingToCreatedListingDTO(Listing listing);
 
     @Mapping(target = "cover", source = "pictures")
-    List<DisplayCardListingDTO> listingToDisplayCardListingDTOs (List<Listing> listings);
+    List<DisplayCardListingDTO> listingToDisplayCardListingDTOs(List<Listing> listings);
 
     @Mapping(target = "cover", source = "pictures", qualifiedByName = "extract-cover")
-    DisplayCardListingDTO listingToDisplayCardListingDTO (Listing listing);
+    DisplayCardListingDTO listingToDisplayCardListingDTO(Listing listing);
 
-    default PricesVO mapPriceToPriceVO (int price) {
+    default PricesVO mapPriceToPriceVO(int price) {
         return new PricesVO(price);
     }
 
@@ -52,5 +52,9 @@ public interface ListingMapper {
     @Mapping(target = "infos.baths.value", source = "bathrooms")
     @Mapping(target = "category", source = "bookingCategory")
     @Mapping(target = "price.value", source = "price")
-    DisplayListingDTO listingToDisplayListingDTO (Listing listing);
+    DisplayListingDTO listingToDisplayListingDTO(Listing listing);
+
+    @Mapping(target = "listingPublicId", source = "publicId")
+    ListingCreateBookingDTO mapListingToListingCreateBookingDTO(Listing listing);
+
 }
